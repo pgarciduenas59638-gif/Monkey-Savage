@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Contraseñas Seguro</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Generador de Contraseñas</h1>
+        
+        <div class="password-display">
+            <input type="text" id="passwordOutput" readonly placeholder="Tu contraseña aparecerá aquí">
+            <button id="copyBtn" class="copy-btn" title="Copiar al portapapeles">📋</button>
+        </div>
+
+        <div class="options">
+            <div class="option-group">
+                <label for="length">Longitud:</label>
+                <input type="number" id="length" min="4" max="128" value="16">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="uppercase" checked>
+                <label for="uppercase">Mayúsculas (A-Z)</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="lowercase" checked>
+                <label for="lowercase">Minúsculas (a-z)</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="numbers" checked>
+                <label for="numbers">Números (0-9)</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="symbols" checked>
+                <label for="symbols">Símbolos (!@#$...)</label>
+            </div>
+
+            <button id="generateBtn" class="generate-btn">Generar Contraseña</button>
+        </div>
+
+        <div class="strength-indicator">
+            <span>Fuerza:</span>
+            <div id="strengthBar" class="strength-bar"></div>
+        </div>
+    </div>
+
+    <script src="js/generator.js"></script>
+</body>
+</html>
+
+
+
+
