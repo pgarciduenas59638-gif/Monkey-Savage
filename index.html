@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generador de códigos QR seguro, privado y gratuito. 100% cliente.">
+    <meta name="keywords" content="qr generator, código qr, generador qr, javascript, github pages">
+    <meta name="author" content="Tu Nombre">
+    <meta property="og:title" content="Generador de QR Profesional">
+    <meta property="og:description" content="Crea códigos QR de forma segura y privada">
+    <meta property="og:type" content="website">
+    
+    <title>📱 Generador de QR Profesional</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="lib/qrcode.min.js" as="script">
+    <link rel="preload" href="js/qr-generator.js" as="script">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📱</text></svg>">
+    
+    <!-- PWA Meta -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+    <main class="container" id="main-content">
+        <header class="header">
+            <h1>Generador de QR</h1>
+            <p class="subtitle">Crea códigos QR de forma segura y privada - <strong>Tu información nunca sale de tu navegador</strong></p>
+        </header>
+
+        <!-- Sección de entrada -->
+        <section class="input-section" aria-labelledby="input-heading">
+            <h2 id="input-heading" class="visually-hidden">Configuración del QR</h2>
+            
+            <div class="form-group">
+                <label for="qrText">Texto, URL o información <span class="required">*</span></label>
+                <textarea 
+                    id="qrText" 
+                    placeholder="https://ejemplo.com&#10;Texto libre&#10;Correo: mail@ejemplo.com&#10;Teléfono: +1234567890"
+                    rows="4"
+                    maxlength="2953"
+                    required
+                    aria-describedby="qrText-help charCounter validationMessage"
+                ></textarea>
+                <div class="help-text" id="qrText-help">Máximo 2953 caracteres para nivel de corrección "Medio"</div>
+                <div class="char-counter" id="charCounter">0 / 2953 caracteres</div>
+            </div>
+
+            <div class="options-grid">
+                <div class="form-group">
+                    <label for="qrSize">Tamaño del QR</label>
+                    <select id="qrSize" aria-label="Seleccionar tamaño del código QR">
+                        <option value="200">200 × 200 px</option>
+                        <option value="300" selected>300 × 300 px</option>
+                        <option value="400">400 × 400 px</option>
+                        <option value="500">500 × 500 px</option>
+                        <option value="600">600 × 600 px</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="errorCorrection">Nivel de corrección de errores</label>
+                    <select id="errorCorrection" aria-label="Nivel de redundancia del QR">
+                        <option value="L">Bajo - 7% (máxima densidad)</option>
+                        <option value="M" selected>Medio - 15% (recomendado)</option>
+                        <option value="Q">Alto - 25%</option>
+                        <option value="H">Máximo - 30% (mínima densidad)</option>
+                    </select>
+                </div>
+
+                <div class="form-group color-group">
+                    <label for="qrColor">Color del QR</label>
+                    <input type="color" id="qrColor" value="#000000" aria-label="Color de los módulos QR">
+                </div>
+
+                <div class="form-group color-group">
+                    <label for="bgColor">Color de fondo</label>
+                    <input type="color" id="bgColor" value="#ffffff" aria-label="Color de fondo del QR">
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="generateBtn" class="btn btn-primary" aria-label="Generar código QR">
+                    <span class="icon">🎨</span>
+                    <span>Generar QR</span>
+                </button>
+                <button id="clearBtn" class="btn btn-secondary" aria-label="Limpiar formulario">
+                    <span class="icon">🗑️</span>
+                    <span>Limpiar</span>
+                </button>
+            </div>
+
+            <div id="validationMessage" class="validation-message" role="alert"></div>
+        </section>
+
+        <!-- Sección de salida -->
+        <section class="output-section" id="outputSection" aria-labelledby="output-heading" style="display: none;">
+            <h2 id="output-heading" class="visually-hidden">Código QR generado</h2>
+            
+            <div class="qr-preview" aria-live="polite">
+                <div id="qrCanvas" class="qr-canvas"></div>
+                <div id="qrLoader" class="loader" style="display: none;"></div>
+            </div>
+
+            <div class="qr-stats">
+                <p><strong>Caracteres:</strong> <span id="infoLength">-</span></p>
+                <p><strong>Tipo detectado:</strong> <span id="infoType">-</span></p>
+                <p><strong>Tamaño:</strong> <span id="infoSize">-</span> px</p>
+                <p><strong>Generado:</strong> <span id="infoTimestamp">-</span></p>
+            </div>
+
+            <div class="qr-actions">
+                <button id="downloadBtn" class="btn btn-success" aria-label="Descargar QR como PNG">
+                    <span class="icon">💾</span>
+                    <span>Descargar PNG</span>
+                </button>
+                <button id="copyImageBtn" class="btn btn-secondary" aria-label="Copiar QR al portapapeles">
+                    <span class="icon">📋</span>
+                    <span>Copiar Imagen</span>
+                </button>
+                <button id="saveHistoryBtn" class="btn btn-secondary" aria-label="Guardar QR en historial">
+                    <span class="icon">💾</span>
+                    <span>Guardar Historial</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Historial -->
+        <section class="history-section" id="historySection" aria-labelledby="history-heading">
+            <h2 id="history-heading">📚 Historial Local</h2>
+            <div id="historyList" class="history-grid" role="list">
+                <p class="empty-state">No hay códigos QR guardados. Genera uno y guárdalo aquí.</p>
+            </div>
+            <div class="history-actions">
+                <button id="clearHistoryBtn" class="btn btn-danger" style="display: none;">
+                    <span class="icon">🗑️</span>
+                    <span>Limpiar Historial</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>🔒 <strong>100% Privado:</strong> Todo se procesa en tu navegador. No hay servidores, no hay rastreo.</p>
+            <p>Hecho con ❤️ usando <a href="https://github.com/davidshimjs/qrcodejs" target="_blank" rel="noopener">QRCode.js</a></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="lib/qrcode.min.js" defer></script>
+    <script src="js/qr-generator.js" defer></script>
+</body>
+</html>
