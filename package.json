@@ -1,0 +1,32 @@
+{
+  "name": "qr-generator",
+  "version": "1.0.0",
+  "description": "Generador de códigos QR seguro y privado con vanilla JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080 -o -c-1",
+    "dev": "npx live-server --port=8080 --no-browser",
+    "test": "echo \"Sin pruebas aún\" && exit 0"
+  },
+  "keywords": [
+    "qr-code",
+    "generator",
+    "vanilla-js",
+    "privacy",
+    "github-pages"
+  ],
+  "author": "Tu Nombre",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/qr-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tu-usuario/qr-generator/issues"
+  },
+  "homepage": "https://tu-usuario.github.io/qr-generator"
+}
